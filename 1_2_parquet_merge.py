@@ -1,9 +1,21 @@
 import pandas as pd
 #why this additional code? for some reason the merging didn't quite work in the first one and there was no time to troubleshoot, living it for later
 # step 1: defining the file paths
-parquet_input = '/Users/annatymoshenko/Desktop/Docs/Data Analysis/Backlink_check/output_parquet_sistrix_merged.xlsx'
-sistrix_input = '/Users/annatymoshenko/Desktop/Docs/Data Analysis/Backlink_check/input_links_sistrix.xlsx'
-output_path = '/Users/annatymoshenko/Desktop/Docs/Data Analysis/Backlink_check/merged_results.xlsx'
+#parquet_input = '/Users/annatymoshenko/Desktop/Docs/Data Analysis/Backlink_check/output_parquet_sistrix_merged.xlsx'
+
+
+# prep 1: read the CSV (you can specify encoding if you get a UnicodeDecodeError)
+df = pd.read_csv('/Users/annatymoshenko/Desktop/Docs/Data Analysis/Backlink_check/output_fol_parquet_sistrix_merged.csv', sep=';', encoding='utf-8')
+
+# prep 2: convert to Excel with the 'strings_to_urls' fix
+with pd.ExcelWriter('/Users/annatymoshenko/Desktop/Docs/Data Analysis/Backlink_check/output_fol_parquet_sistrix_merged.xlsx', engine='xlsxwriter', engine_kwargs={'options': {'strings_to_urls': False}}) as writer:
+    df.to_excel(writer, index=False, sheet_name='Sheet1')
+
+print("Conversion complete!")
+
+pparquet_input = '/Users/annatymoshenko/Desktop/Docs/Data Analysis/Backlink_check/output_fol_parquet_sistrix_merged.xlsx'
+sistrix_input = '/Users/annatymoshenko/Desktop/Docs/Data Analysis/Backlink_check/input_fol_links_sistrix.xlsx'
+output_path = '/Users/annatymoshenko/Desktop/Docs/Data Analysis/Backlink_check/merged_fol_results.xlsx'
 
 print("Loading files...")
 
